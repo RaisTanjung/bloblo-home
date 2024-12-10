@@ -1,0 +1,106 @@
+<html>
+<head>
+    <title>Mini Sandbox Game</title>
+    <script src="https://registry.npmmirror.com/vue/3.3.11/files/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .game-container {
+            width: 800px;
+            height: 600px;
+            border: 2px solid #000;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .player {
+            width: 40px;
+            height: 40px;
+            background-color: #3498db;
+            position: absolute;
+        }
+        .block {
+            width: 40px;
+            height: 40px;
+            background-color: #2ecc71;
+            position: absolute;
+        }
+        .house {
+            width: 120px;
+            height: 120px;
+            background-color: #e74c3c;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <h1 class="text-3xl font-bold mb-4">Mini Sandbox Game</h1>
+        <div class="game-container" ref="gameContainer">
+            <div v-for="block in blocks" :key="block.id" class="block" :style="{ top: block.y + 'px', left: block.x + 'px' }"></div>
+            <div class="player" :style="{ top: player.y + 'px', left: player.x + 'px' }"></div>
+            <div class="house" :style="{ top: house.y + 'px', left: house.x + 'px' }"></div>
+        </div>
+    </div>
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+
+        createApp({
+            setup() {
+                const gameContainer = ref(null);
+                const player = ref({ x: 0, y: 0 });
+                const house = ref({ x: 200, y: 200 });
+                const blocks = ref([
+                    { id: 1, x: 40, y: 40 },
+                    { id: 2, x: 80, y: 40 },
+                    { id: 3, x: 120, y: 40 },
+                    { id: 4, x: 160, y: 40 },
+                    { id: 5, x: 200, y: 40 },
+                    { id: 6, x: 240, y: 40 },
+                    { id: 7, x: 280, y: 40 },
+                    { id: 8, x: 320, y: 40 },
+                    { id: 9, x: 360, y: 40 },
+                    { id: 10, x: 400, y: 40 },
+                    { id: 11, x: 440, y: 40 },
+                    { id: 12, x: 480, y: 40 },
+                    { id: 13, x: 520, y: 40 },
+                    { id: 14, x: 560, y: 40 },
+                    { id: 15, x: 600, y: 40 }
+                ]);
+
+                const movePlayer = (event) => {
+                    const step = 40;
+                    switch (event.key) {
+                        case 'ArrowUp':
+                            if (player.value.y > 0) player.value.y -= step;
+                            break;
+                        case 'ArrowDown':
+                            if (player.value.y < gameContainer.value.clientHeight - step) player.value.y += step;
+                            break;
+                        case 'ArrowLeft':
+                            if (player.value.x > 0) player.value.x -= step;
+                            break;
+                        case 'ArrowRight':
+                            if (player.value.x < gameContainer.value.clientWidth - step) player.value.x += step;
+                            break;
+                    }
+                };
+
+                onMounted(() => {
+                    window.addEventListener('keydown', movePlayer);
+                });
+
+                return {
+                    gameContainer,
+                    player,
+                    blocks,
+                    house
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
